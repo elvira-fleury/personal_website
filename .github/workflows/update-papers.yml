@@ -6,7 +6,10 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # Add this line to enable manual triggering
+  workflow_dispatch: # Allows manual triggering
+
+permissions:
+  contents: write
 
 jobs:
   update-papers:
@@ -27,12 +30,9 @@ jobs:
     - name: Run update script
       run: node update-papers.js
 
-    - name: Commit and push changes
-      env:
-        ACTIONS_PAT: ${{ secrets.ACTIONS_PAT }}
+    - name: Commit and push changes if any
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
         git add .
-        git commit -m 'Update papers'
-        git push https://x-access-token:${{ secrets.ACTIONS_PAT }}@github.com/elvira-fleury/personal_website.git
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update papers" && git push)
