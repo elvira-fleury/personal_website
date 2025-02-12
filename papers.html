@@ -19,7 +19,7 @@
     <main>
         <section class="papers">
             <h2>Recent Papers from arXiv</h2>
-            <div id="papers-list"></div>
+            <div id="papers-list"><p>No papers found.</p></div>
         </section>
     </main>
 
@@ -29,7 +29,7 @@
 
     <script>
         async function fetchPapers() {
-            const response = await fetch('http://export.arxiv.org/api/query?search_query=all:(PFAS+AND+Follicular+Fluid)+OR+(PCOS+AND+PFAS)&start=0&max_results=5');
+            const response = await fetch('http://export.arxiv.org/api/query?search_query=all:PFAS&start=0&max_results=5&sortBy=submittedDate&sortOrder=descending');
             const data = await response.text();
             const parser = new DOMParser();
             const xml = parser.parseFromString(data, 'application/xml');
